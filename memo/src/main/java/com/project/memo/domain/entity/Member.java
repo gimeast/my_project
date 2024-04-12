@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 @ToString
 public class Member {
@@ -30,6 +31,8 @@ public class Member {
 
     @Column(unique = true)
     private String memberId;
+
+    private String password;
 
     @CreatedBy
     @Column(updatable = false)
