@@ -1,5 +1,6 @@
 package com.project.memo.domain.entity;
 
+import com.project.memo.domain.dto.MemoFormDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +15,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,8 +24,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
+import static java.time.LocalDateTime.*;
+
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "memo")
 @ToString
@@ -45,15 +50,44 @@ public class Memo {
 
     @CreatedBy
     @Column(updatable = false)
-    private String createdBy; //생성자
+    private Long createdBy; //생성자
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate; //생성일시
 
     @LastModifiedBy
-    private String lastModifiedBy; //수정자
+    private Long lastModifiedBy; //수정자
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate; //수정일시
+
+    /**
+     * @Method         : createMemo
+     * @Description    : 메모 생성 메서드
+     * @Author         : gimeast
+     * @Date           : 2024. 04. 13.
+     * @params         : content, member
+     * @return         : Memo
+     */
+    public static Memo createMemo(MemoFormDto memoFormDto) {
+        Memo memo = new Memo();
+        memo.setContent(memoFormDto.getContent());
+
+        Member member = new Member();
+        if(memoFormDto.getMemberIdx() != null && memoFormDto.getMemberId() != null) {
+            member.setIdx(memoFormDto.getMemberIdx());
+            member.setMemberId(memoFormDto.getMemberId());
+
+            memo.setMember(member);
+
+            memo.setCreatedBy(member.getIdx());
+            memo.setLastModifiedBy(member.getIdx());
+            memo.setCreatedDate(now());
+            memo.setLastModifiedDate(now());
+        }
+
+        return memo;
+    }
+
 }

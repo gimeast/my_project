@@ -21,4 +21,5 @@ public class MemoDto {
         this.content = content;
         this.lastModifiedDate = lastModifiedDate;
     }
+
 }
