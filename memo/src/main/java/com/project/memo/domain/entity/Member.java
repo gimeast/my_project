@@ -6,8 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,7 +20,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 @ToString
 public class Member {
@@ -30,6 +33,8 @@ public class Member {
 
     @Column(unique = true)
     private String memberId;
+
+    private String password;
 
     @CreatedBy
     @Column(updatable = false)
