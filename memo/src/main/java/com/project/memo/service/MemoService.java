@@ -1,5 +1,6 @@
 package com.project.memo.service;
 
+import com.project.memo.domain.dto.MemberDTO;
 import com.project.memo.domain.dto.MemoDto;
 import com.project.memo.domain.dto.MemoFormDto;
 import com.project.memo.domain.entity.Memo;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,15 +22,19 @@ public class MemoService {
     private final MemoRepository memoRepository;
 
     /**
-     * @Method         : getMemoList
-     * @Description    : 메모 목록 조회
-     * @Author         : gimeast
-     * @Date           : 2024. 04. 13.
-     * @params         :
-     * @return         : memoDtoList
+     * @return : memoDtoList
+     * @Method : getMemoList
+     * @Description : 메모 목록 조회
+     * @Author : gimeast
+     * @Date : 2024. 04. 13.
+     * @params : loginUser
      */
-    public List<MemoDto> getMemoList() throws Exception {
-        return memoRepository.selectMemoList();
+    public List<MemoDto> getMemoList(MemberDTO loginUser) throws Exception {
+        if (loginUser != null) {
+            return memoRepository.selectMemoList(loginUser);
+        } else {
+            return null;
+        }
     }
 
     /**

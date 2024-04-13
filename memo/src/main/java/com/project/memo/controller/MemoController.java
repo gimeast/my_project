@@ -1,9 +1,11 @@
 package com.project.memo.controller;
 
 import com.project.memo.common.ResponseDto;
+import com.project.memo.domain.dto.MemberDTO;
 import com.project.memo.domain.dto.MemoDto;
 import com.project.memo.domain.dto.MemoFormDto;
 import com.project.memo.service.MemoService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,9 +31,12 @@ public class MemoController {
      * @return         : memoList
      */
     @GetMapping("/v1/memo")
-    public ResponseDto<ResponseDto<Map<String, Object>>> getMemoList() {
+    public ResponseDto<ResponseDto<Map<String, Object>>> getMemoList(HttpSession session) {
         try {
-            List<MemoDto> memoList = memoService.getMemoList();
+            MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+            if(loginUser == null) return ResponseDto.ofSuccess("성공", ResponseDto.of("200", "메모장을 사용하려면 로그인을 해주세요.", null));
+
+            List<MemoDto> memoList = memoService.getMemoList(loginUser);
             Map<String, Object> rtnMap = new HashMap<>();
 
             rtnMap.put("memoList", memoList);
@@ -51,8 +56,13 @@ public class MemoController {
      * @return         : memoIdx
      */
     @PostMapping("/v1/memo")
-    public ResponseDto<ResponseDto<Map<String, Object>>> saveMemo(@RequestBody MemoFormDto memoFormDto) {
+    public ResponseDto<ResponseDto<Map<String, Object>>> saveMemo(HttpSession session, @RequestBody MemoFormDto memoFormDto) {
         try {
+            MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+            if(loginUser == null) return ResponseDto.ofSuccess("성공", ResponseDto.of("200", "메모장을 사용하려면 로그인을 해주세요.", null));
+
+            memoFormDto.setMemberIdx(loginUser.getMemberIdx());
+            memoFormDto.setMemberId(loginUser.getMemberId());
             Long memoIdx = memoService.saveMemo(memoFormDto);
             Map<String, Object> rtnMap = new HashMap<>();
 

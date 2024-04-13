@@ -48,6 +48,8 @@ public class Memo {
     @JoinColumn(name = "member_idx")
     private Member member;
 
+    private int displayOrder; //메모 순서
+
     @CreatedBy
     @Column(updatable = false)
     private Long createdBy; //생성자
@@ -76,6 +78,7 @@ public class Memo {
         memo.setCreatedDate(now());
         memo.setLastModifiedDate(now());
         memo.setMemberSyncStatus(MemberSyncStatus.NOT_SYNC);
+        memo.setDisplayOrder(memoFormDto.getDisplayOrder());
 
         Member member = new Member();
         if(memoFormDto.getMemberIdx() != null && memoFormDto.getMemberId() != null) {
