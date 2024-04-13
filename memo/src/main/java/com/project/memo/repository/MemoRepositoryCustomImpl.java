@@ -18,9 +18,10 @@ public class MemoRepositoryCustomImpl implements MemoRepositoryCustom {
     public List<MemoDto> selectMemoList() {
         return queryFactory
                 .select(
-                        new QMemoDto(memo.idx.as("memoIdx"), memo.content, memo.lastModifiedDate)
+                        new QMemoDto(memo.idx.as("memoIdx"), memo.content, memo.displayOrder, memo.lastModifiedDate)
                 )
                 .from(memo)
+                .orderBy(memo.displayOrder.asc())
                 .fetch();
     }
 

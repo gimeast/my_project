@@ -12,13 +12,15 @@ public class MemoDto {
 
     private Long memoIdx;
     private String content; //memo 내용
+    private int displayOrder;
 
     private LocalDateTime lastModifiedDate; //수정일시
 
     @QueryProjection
-    public MemoDto(Long memoIdx, String content, LocalDateTime lastModifiedDate) {
+    public MemoDto(Long memoIdx, String content, int displayOrder, LocalDateTime lastModifiedDate) {
         this.memoIdx = memoIdx;
         this.content = content;
+        this.displayOrder = displayOrder;
         this.lastModifiedDate = lastModifiedDate;
     }
 

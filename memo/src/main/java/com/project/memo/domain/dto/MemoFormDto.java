@@ -13,5 +13,6 @@ public class MemoFormDto {
     private String content;
     private Long memberIdx;
     private String memberId;
+    private int displayOrder;
 
 }
