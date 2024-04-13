@@ -1,9 +1,10 @@
 package com.project.memo.repository;
 
+import com.project.memo.domain.dto.MemberDTO;
 import com.project.memo.domain.dto.MemoDto;
 
 import java.util.List;
 
 public interface MemoRepositoryCustom {
-    List<MemoDto> selectMemoList();
+    List<MemoDto> selectMemoList(MemberDTO loginUser);
 }
