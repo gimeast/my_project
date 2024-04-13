@@ -49,4 +49,11 @@ public class Member {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate; //수정일시
+
+    public Member(String memberId, String password) {
+        this.memberId = memberId;
+        this.password = password;
+        this.createdDate = LocalDateTime.now();
+        this.lastModifiedDate = LocalDateTime.now();
+    }
 }

@@ -8,6 +8,7 @@ import com.project.memo.service.MemoService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -74,4 +75,26 @@ public class MemoController {
         }
     }
 
+    /**
+     * @Method         : memoReorder
+     * @Description    : 메모 순서 변경
+     * @Author         : gimeast
+     * @Date           : 2024. 04. 14.
+     * @params         : memoFormDtoList
+     * @return         :
+     */
+    @PatchMapping("/v1/memo/reorder")
+    public ResponseDto<ResponseDto<Map<String, Object>>> memoReorder(HttpSession session, @RequestBody List<MemoFormDto> memoFormDtoList) {
+        try {
+            MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+            if(loginUser == null) return ResponseDto.ofSuccess("성공", ResponseDto.of("201", "메모장을 사용하려면 로그인을 해주세요.", null));
+
+            memoService.memoReorder(memoFormDtoList);
+
+            return ResponseDto.ofSuccess("성공", ResponseDto.of("201", "메모 정렬 순서를 변경하였습니다.", null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.ofFail("메모 정렬 순서 변경 중 오류가 발생하였습니다.");
+        }
+    }
 }

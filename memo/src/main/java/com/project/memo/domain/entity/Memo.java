@@ -72,18 +72,17 @@ public class Memo {
      * @params         : content, member
      * @return         : Memo
      */
-    public static Memo createMemo(MemoFormDto memoFormDto) {
+    public static Memo createMemo(String content, int displayOrder, Long memberIdx) {
         Memo memo = new Memo();
-        memo.setContent(memoFormDto.getContent());
+        memo.setContent(content);
         memo.setCreatedDate(now());
         memo.setLastModifiedDate(now());
         memo.setMemberSyncStatus(MemberSyncStatus.NOT_SYNC);
-        memo.setDisplayOrder(memoFormDto.getDisplayOrder());
+        memo.setDisplayOrder(displayOrder);
 
         Member member = new Member();
-        if(memoFormDto.getMemberIdx() != null && memoFormDto.getMemberId() != null) {
-            member.setIdx(memoFormDto.getMemberIdx());
-            member.setMemberId(memoFormDto.getMemberId());
+        if(memberIdx != null) {
+            member.setIdx(memberIdx);
 
             memo.setMember(member);
 
@@ -94,12 +93,12 @@ public class Memo {
         return memo;
     }
 
-    public void updateMemo(MemoFormDto memoFormDto) {
-        this.setContent(memoFormDto.getContent());
+    public void updateMemo(String content, Long memberIdx) {
+        this.setContent(content);
         this.setLastModifiedDate(now());
 
-        if(memoFormDto.getMemberIdx() != null && memoFormDto.getMemberId() != null) {
-            this.setLastModifiedBy(member.getIdx());
+        if(memberIdx != null) {
+            this.setLastModifiedBy(memberIdx);
         }
     }
 
