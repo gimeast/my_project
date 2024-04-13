@@ -19,10 +19,6 @@ api 개발
 2024.04.13 ~   
 프론트 적용 및 추가 적인 개발
 
-## 개발자 소개(역할분담 상세)
-__lee(frontend)__  
-__gimeast(backend)__  
-
 ## 개발환경
 개발도구: JDK17(azul)  
 개발환경: IntelliJ  
