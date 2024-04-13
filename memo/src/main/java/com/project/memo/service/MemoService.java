@@ -3,12 +3,15 @@ package com.project.memo.service;
 import com.project.memo.domain.dto.MemoDto;
 import com.project.memo.domain.dto.MemoFormDto;
 import com.project.memo.domain.entity.Memo;
+import com.project.memo.exception.NoSuchMemoException;
 import com.project.memo.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -38,10 +41,23 @@ public class MemoService {
      * @params         : memoFormDto
      * @return         : memoIdx
      */
+    @Transactional
     public Long saveMemo(MemoFormDto memoFormDto) throws Exception {
-        Memo memo = Memo.createMemo(memoFormDto);
-        memoRepository.save(memo);
-        return memo.getIdx();
+        Long memoIdx = memoFormDto.getMemoIdx();
+        if(memoIdx != null) {
+            Optional<Memo> findMemo = memoRepository.findById(memoIdx);
+            if (findMemo.isPresent()) {
+                findMemo.get().updateMemo(memoFormDto);
+
+                return memoIdx;
+            } else {
+                throw new NoSuchMemoException("수정하려는 메모의 정보가 없습니다.");
+            }
+        } else {
+            Memo memo = Memo.createMemo(memoFormDto);
+            memoRepository.save(memo);
+            return memo.getIdx();
+        }
     }
 
 }

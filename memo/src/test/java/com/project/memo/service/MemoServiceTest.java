@@ -14,7 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -35,6 +37,7 @@ class MemoServiceTest {
             memoFormDto.setContent("메모"+i);
             Memo memo = Memo.createMemo(memoFormDto);
             memoRepository.save(memo);
+            System.out.println("메모 더미 데이터 10개 생성");
         }
     }
 
@@ -43,10 +46,20 @@ class MemoServiceTest {
     void getMemoList() {
         try {
             List<MemoDto> memoList = memoService.getMemoList();
-            Assertions.assertEquals(10, memoList.size());
+            assertEquals(10, memoList.size());
             System.out.println("memoList = " + memoList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    @DisplayName("메모 수정")
+    void updateMemo() {
+        Optional<Memo> findMemo = memoRepository.findById(1L);
+        findMemo.ifPresent(memo -> memo.updateMemo(new MemoFormDto(memo.getIdx(), "바뀐 내용", null, null)));
+        List<Memo> memoList = memoRepository.findAll();
+        System.out.println("memoList = " + memoList);
+
     }
 }

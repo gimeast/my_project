@@ -73,6 +73,9 @@ public class Memo {
     public static Memo createMemo(MemoFormDto memoFormDto) {
         Memo memo = new Memo();
         memo.setContent(memoFormDto.getContent());
+        memo.setCreatedDate(now());
+        memo.setLastModifiedDate(now());
+        memo.setMemberSyncStatus(MemberSyncStatus.NOT_SYNC);
 
         Member member = new Member();
         if(memoFormDto.getMemberIdx() != null && memoFormDto.getMemberId() != null) {
@@ -83,11 +86,18 @@ public class Memo {
 
             memo.setCreatedBy(member.getIdx());
             memo.setLastModifiedBy(member.getIdx());
-            memo.setCreatedDate(now());
-            memo.setLastModifiedDate(now());
         }
 
         return memo;
+    }
+
+    public void updateMemo(MemoFormDto memoFormDto) {
+        this.setContent(memoFormDto.getContent());
+        this.setLastModifiedDate(now());
+
+        if(memoFormDto.getMemberIdx() != null && memoFormDto.getMemberId() != null) {
+            this.setLastModifiedBy(member.getIdx());
+        }
     }
 
 }

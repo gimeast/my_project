@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemoFormDto {
 
+    private Long memoIdx;
     private String content;
     private Long memberIdx;
     private String memberId;
