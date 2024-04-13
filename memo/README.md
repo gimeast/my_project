@@ -24,7 +24,6 @@ api 개발
 개발환경: IntelliJ  
 
 ## 기술스택
-``프론트: React``  
 ``백엔드: Java, JPA(Hibernate), Spring Data JPA, Querydsl``  
 ``데이터베이스: H2``  
 ``build system: gradle - groovy``    
