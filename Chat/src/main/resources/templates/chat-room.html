@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅방</title>
+    <style>
+        .conversation {
+            list-style-type: none;
+            padding: 0;
+        }
+        .conversation li {
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+        }
+        .chat-time {
+            font-size: 0.8em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<ul class="conversation" th:each="message : ${messages}">
+    <li>
+        <div>
+            <strong th:text="${message.memberName}"></strong>
+            <span class="chat-time" th:text="${#temporals.format(message.sendTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+        </div>
+        <p th:text="${message.content}"></p>
+    </li>
+</ul>
+</body>
+</html>

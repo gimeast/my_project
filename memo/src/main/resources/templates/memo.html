@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>메모장</title>
+</head>
+<body>
+<ul>
+    <li th:each="memo : ${memoList}">
+        <a href="#"><span th:text="${memo.content}"/></a>
+    </li>
+</ul>
+</body>
+</html>
