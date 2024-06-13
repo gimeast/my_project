@@ -33,6 +33,12 @@
         </li>
     </ul>
 </div>
+<div class="input-group mb-3">
+    <input type="text" id="msg" />
+    <div>
+        <button type="button" id="button-send">전송</button>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
@@ -43,20 +49,23 @@
         const memberId = [[${member.id}]];
         const memberName = [[${member.name}]];
 
-        const sockJs = new SockJS("/stomp/chat");
+        const sockJs = new SockJS('/stomp/chat');
 
         //1. SockJS를 이용하여 stomp를 반환한다.
         const stomp = Stomp.over(sockJs);
 
         //2. connection이 맺어지면 실행된다.
         stomp.connect({}, function () {
-            console.log("STOMP Connection");
+            console.log('STOMP 연결');
 
-            //4. subscribe(path, callback)으로 메세지를 받을 수 있음
+            //4. subscribe(path, callback)으로 메세지를 받을 수 있다
             stomp.subscribe("/sub/chat/room/" + chatRoomId, function (chat) {
+                console.log('chat : {}', chat)
                 const dto = JSON.parse(chat.body);
+                console.log('dto : {}', dto)
 
                 const writer = dto.memberName;
+                const message = dto.content;
                 let str = '';
 
                 if (dto.memberId === memberId) {
@@ -66,7 +75,7 @@
                     str += "    </div>";
                     str += "</div>";
 
-                    $("#msgArea").append(str);
+                    document.getElementById('msgArea').append(str);
                 } else {
                     str = "<div>";
                     str += "    <div>";
@@ -77,10 +86,20 @@
                 }
 
                 document.getElementById('msgArea').append(str);
+
+                console.info('str : {}', str)
             });
 
             //3. send(path, header, message)로 메세지를 보낼 수 있음
             stomp.send('/pub/chat/enter', {}, JSON.stringify({chatRoomId: chatRoomId, memberName: memberName}));
+        });
+
+        document.getElementById('button-send').addEventListener('click', function() {
+            const msg = document.getElementById('msg');
+
+            console.log(memberName + ':' + msg.value);
+            stomp.send('/pub/chat/message', {}, JSON.stringify({chatRoomId: chatRoomId, content: msg.value, memberName: memberName, memberId: memberId}));
+            msg.value = '';
         });
 
     };

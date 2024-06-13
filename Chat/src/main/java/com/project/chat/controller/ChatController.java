@@ -51,14 +51,6 @@ public class ChatController {
         log.info("[채팅방 추가]: {}", chatRoomDto);
         return chatRoomService.save(chatRoomDto);
     }
-/*
-    @PostMapping("/chat-rooms")
-    public String addRoom(String name, RedirectAttributes rttr) {
-        log.info("[채팅방 추가] 채팅방 명: {}", name);
-        rttr.addFlashAttribute("roomName", chatRoomService.save(name));
-        return "redirect:/chat/rooms";
-    }
-*/
 
     @GetMapping("/chat-rooms/{id}")
     public String chatRoomDetail(HttpSession session, @PathVariable Long id, Model model) {
