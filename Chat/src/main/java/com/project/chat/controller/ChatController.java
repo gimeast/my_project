@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -47,20 +48,28 @@ public class ChatController {
     @ResponseBody
     @PostMapping("/chat-rooms")
     public ChatRoomDto addRoom(@RequestBody ChatRoomDto chatRoomDto) {
-        log.info("채팅방 추가:{}", chatRoomDto);
+        log.info("[채팅방 추가]: {}", chatRoomDto);
         return chatRoomService.save(chatRoomDto);
     }
+/*
+    @PostMapping("/chat-rooms")
+    public String addRoom(String name, RedirectAttributes rttr) {
+        log.info("[채팅방 추가] 채팅방 명: {}", name);
+        rttr.addFlashAttribute("roomName", chatRoomService.save(name));
+        return "redirect:/chat/rooms";
+    }
+*/
 
     @GetMapping("/chat-rooms/{id}")
     public String chatRoomDetail(HttpSession session, @PathVariable Long id, Model model) {
         MemberDto member = (MemberDto) session.getAttribute("member");
 
-        //TODO:소켓생성
-
-        //기존 대화내용 있으면 화면단에 뿌린다.
-
+        // 기존 대화내용 있으면 화면단에 뿌린다.
         List<ChatMessageDto> messages = chatMessageService.getAllChatMessages(id);
         model.addAttribute("messages", messages);
+        model.addAttribute("chatRoomId", id);
+        model.addAttribute("member", member);
+
         return "chat-room";
     }
 

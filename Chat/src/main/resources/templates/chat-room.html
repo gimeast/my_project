@@ -21,14 +21,71 @@
     </style>
 </head>
 <body>
-<ul class="conversation" th:each="message : ${messages}">
-    <li>
-        <div>
-            <strong th:text="${message.memberName}"></strong>
-            <span class="chat-time" th:text="${#temporals.format(message.sendTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
-        </div>
-        <p th:text="${message.content}"></p>
-    </li>
-</ul>
+
+<div id="msgArea">
+    <ul class="conversation" th:each="message : ${messages}">
+        <li>
+            <div>
+                <strong th:text="${message.memberName}"></strong>
+                <span class="chat-time" th:text="${#temporals.format(message.sendTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+            <p th:text="${message.content}"></p>
+        </li>
+    </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script th:inline="javascript">
+    window.onload = function () {
+        const chatRoomId = [[${chatRoomId}]];
+        const memberId = [[${member.id}]];
+        const memberName = [[${member.name}]];
+
+        const sockJs = new SockJS("/stomp/chat");
+
+        //1. SockJS를 이용하여 stomp를 반환한다.
+        const stomp = Stomp.over(sockJs);
+
+        //2. connection이 맺어지면 실행된다.
+        stomp.connect({}, function () {
+            console.log("STOMP Connection");
+
+            //4. subscribe(path, callback)으로 메세지를 받을 수 있음
+            stomp.subscribe("/sub/chat/room/" + chatRoomId, function (chat) {
+                const dto = JSON.parse(chat.body);
+
+                const writer = dto.memberName;
+                let str = '';
+
+                if (dto.memberId === memberId) {
+                    str = "<div>";
+                    str += "    <div>";
+                    str += "        <b>" + writer + " : " + message + "</b>";
+                    str += "    </div>";
+                    str += "</div>";
+
+                    $("#msgArea").append(str);
+                } else {
+                    str = "<div>";
+                    str += "    <div>";
+                    str += "        <b>" + writer + " : " + message + "</b>";
+                    str += "    </div>";
+                    str += "</div>";
+                    document.getElementById('msgArea').append(str);
+                }
+
+                document.getElementById('msgArea').append(str);
+            });
+
+            //3. send(path, header, message)로 메세지를 보낼 수 있음
+            stomp.send('/pub/chat/enter', {}, JSON.stringify({chatRoomId: chatRoomId, memberName: memberName}));
+        });
+
+    };
+
+</script>
+
 </body>
 </html>
