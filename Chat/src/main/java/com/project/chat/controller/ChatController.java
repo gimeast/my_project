@@ -55,14 +55,17 @@ public class ChatController {
     @GetMapping("/chat-rooms/{id}")
     public String chatRoomDetail(HttpSession session, @PathVariable Long id, Model model) {
         MemberDto member = (MemberDto) session.getAttribute("member");
-
-        // 기존 대화내용 있으면 화면단에 뿌린다.
-        List<ChatMessageDto> messages = chatMessageService.getAllChatMessages(id);
-        model.addAttribute("messages", messages);
         model.addAttribute("chatRoomId", id);
         model.addAttribute("member", member);
 
         return "chat-room";
+    }
+
+    @GetMapping("/chat-rooms/{id}/messages")
+    @ResponseBody
+    public List<ChatMessageDto> chatRoomDetail(HttpSession session, @PathVariable Long id) {
+        // 기존 대화내용 있으면 화면단에 뿌린다.
+        return chatMessageService.getAllChatMessages(id);
     }
 
 }
