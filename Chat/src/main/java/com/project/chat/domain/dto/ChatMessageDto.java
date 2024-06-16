@@ -1,6 +1,8 @@
 package com.project.chat.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.chat.domain.ChatMessage;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Setter
+@Data
 public class ChatMessageDto {
     private Long id;
     private String content;
@@ -16,6 +18,15 @@ public class ChatMessageDto {
     private Long memberId;
     private String memberName;
     private Long chatRoomId;
+
+    public ChatMessageDto() {}
+
+    public ChatMessageDto(String content, Long memberId, String memberName, Long chatRoomId) {
+        this.content = content;
+        this.memberId = memberId;
+        this.memberName = memberName;
+        this.chatRoomId = chatRoomId;
+    }
 
     public static ChatMessageDto chatMessageToDto(ChatMessage chatMessage) {
         ChatMessageDto chatMessageDto = new ChatMessageDto();

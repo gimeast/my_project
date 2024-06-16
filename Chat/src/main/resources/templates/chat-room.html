@@ -3,89 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>채팅방</title>
-    <style>
-        .conversation {
-            list-style-type: none;
-            padding: 0;
-        }
-        .conversation li {
-            padding: 5px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 7px;
-        }
-        .chat-time {
-            font-size: 0.8em;
-            color: #777;
-        }
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="/main.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <script src="/js/stomp.js"></script>
 </head>
 <body>
+<input type="hidden" id="chatRoomId" th:value="${chatRoomId}">
+<input type="hidden" id="memberId" th:value="${member.id}">
+<input type="hidden" id="memberName" th:value="${member.name}">
 
-<div id="msgArea">
-    <ul class="conversation" th:each="message : ${messages}">
-        <li>
-            <div>
-                <strong th:text="${message.memberName}"></strong>
-                <span class="chat-time" th:text="${#temporals.format(message.sendTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
-            </div>
-            <p th:text="${message.content}"></p>
-        </li>
-    </ul>
+<div id="connect-form" class="col-md-6">
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="connect">채팅방 연결:</label>
+            <button id="connect" class="btn btn-default" type="submit">채팅방 연결</button>
+            <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">채팅방 연결 해제</button>
+        </div>
+    </form>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr><th>메세지 내용</th></tr>
+                </thead>
+                <tbody id="messages"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<script th:inline="javascript">
-    window.onload = function () {
-        const chatRoomId = [[${chatRoomId}]];
-        const memberId = [[${member.id}]];
-        const memberName = [[${member.name}]];
-
-        const sockJs = new SockJS("/stomp/chat");
-
-        //1. SockJS를 이용하여 stomp를 반환한다.
-        const stomp = Stomp.over(sockJs);
-
-        //2. connection이 맺어지면 실행된다.
-        stomp.connect({}, function () {
-            console.log("STOMP Connection");
-
-            //4. subscribe(path, callback)으로 메세지를 받을 수 있음
-            stomp.subscribe("/sub/chat/room/" + chatRoomId, function (chat) {
-                const dto = JSON.parse(chat.body);
-
-                const writer = dto.memberName;
-                let str = '';
-
-                if (dto.memberId === memberId) {
-                    str = "<div>";
-                    str += "    <div>";
-                    str += "        <b>" + writer + " : " + message + "</b>";
-                    str += "    </div>";
-                    str += "</div>";
-
-                    $("#msgArea").append(str);
-                } else {
-                    str = "<div>";
-                    str += "    <div>";
-                    str += "        <b>" + writer + " : " + message + "</b>";
-                    str += "    </div>";
-                    str += "</div>";
-                    document.getElementById('msgArea').append(str);
-                }
-
-                document.getElementById('msgArea').append(str);
-            });
-
-            //3. send(path, header, message)로 메세지를 보낼 수 있음
-            stomp.send('/pub/chat/enter', {}, JSON.stringify({chatRoomId: chatRoomId, memberName: memberName}));
-        });
-
-    };
-
-</script>
-
+<div id="content-form" class="col-md-6">
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="content">내용입력</label>
+            <input type="text" id="content" class="form-control">
+        </div>
+        <button id="send" class="btn btn-default" type="submit">Send</button>
+    </form>
+</div>
 </body>
 </html>

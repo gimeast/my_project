@@ -14,7 +14,7 @@ public class MemberDto {
 
     public static MemberDto memberToDto(Member member) {
         MemberDto memberDto = new MemberDto();
-        memberDto.setId(memberDto.getId());
+        memberDto.setId(member.getId());
         memberDto.setName(member.getName());
         return memberDto;
     }
