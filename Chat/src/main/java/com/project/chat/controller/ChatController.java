@@ -55,8 +55,9 @@ public class ChatController {
     @GetMapping("/chat-rooms/{id}")
     public String chatRoomDetail(HttpSession session, @PathVariable Long id, Model model) {
         MemberDto member = (MemberDto) session.getAttribute("member");
-        model.addAttribute("chatRoomId", id);
+
         model.addAttribute("member", member);
+        model.addAttribute("chatRoomId", id);
 
         return "chat-room";
     }
