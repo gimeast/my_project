@@ -1,7 +1,5 @@
 package com.project.chat.controller;
 
-import com.project.chat.domain.ChatRoom;
-import com.project.chat.domain.Member;
 import com.project.chat.domain.dto.ChatMessageDto;
 import com.project.chat.domain.dto.ChatRoomDto;
 import com.project.chat.domain.dto.MemberDto;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
