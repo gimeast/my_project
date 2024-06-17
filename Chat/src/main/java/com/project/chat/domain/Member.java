@@ -5,12 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor
 @Data
@@ -23,7 +19,4 @@ public class Member {
 
     @Column(nullable = false, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "member")
-    private List<ChatRoomMember> chatRooms = new ArrayList<>();
 }
