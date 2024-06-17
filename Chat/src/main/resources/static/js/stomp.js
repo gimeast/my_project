@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:8080/gs-guide-websocket'
+    brokerURL: 'ws://localhost:8080/gs-guide-websocket' //서버 IP:port
 });
 
 stompClient.onConnect = (frame) => {
@@ -32,7 +32,7 @@ function setConnected(connected) {
     $("#messages").html("");
 }
 
-function connect() {
+function connect() {``
     stompClient.activate();
 }
 
