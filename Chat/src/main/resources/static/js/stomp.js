@@ -32,7 +32,7 @@ function setConnected(connected) {
     $("#messages").html("");
 }
 
-function connect() {
+function connect() {``
     stompClient.activate();
 }
 
